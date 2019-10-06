@@ -1,0 +1,6 @@
+name: ${name}
+version: ${project.version}
+main: ${mainClass}
+author: royalkingkb
+description: Sit on stairs
+api-version: 1.13
