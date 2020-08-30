@@ -5,6 +5,7 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -33,9 +34,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (ChairManager.sit(player, block.getLocation().add(0.5, 0, 0.5))) {
-            player.sendMessage("Now sitting");
-        }
+        ChairManager.sit(player, block);
     }
 
     @EventHandler
@@ -46,9 +45,7 @@ public class PlayerListener implements Listener {
 
         Player player = (Player) event.getEntity();
 
-        if (ChairManager.unsit(player)) {
-            player.sendMessage("Stopped sitting");
-        }
+        ChairManager.unsit(player);
     }
 
     @EventHandler
@@ -56,6 +53,20 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
 
         ChairManager.unsit(player);
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        ChairData chairData = ChairManager.getChairData(player);
+
+        if (chairData != null) {
+            Block block = event.getBlock();
+
+            if (chairData.getChairBlock().equals(block)) {
+                ChairManager.unsit(player);
+            }
+        }
     }
 
 }
