@@ -1,6 +1,9 @@
 package com.ruinscraft.chairs;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,11 +38,17 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!(block.getBlockData() instanceof Stairs)) {
-            return;
-        }
+        if (block.getBlockData() instanceof Stairs) {
+            Stairs stairs = (Stairs) block.getBlockData();
 
-        ChairManager.sit(player, block);
+            if (stairs.getHalf() != Bisected.Half.TOP) {
+                Block below = block.getRelative(BlockFace.DOWN);
+
+                if (below.getType() != Material.AIR) {
+                    ChairManager.sit(player, block);
+                }
+            }
+        }
     }
 
     @EventHandler
