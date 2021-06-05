@@ -43,8 +43,11 @@ public class PlayerListener implements Listener {
 
             if (stairs.getHalf() != Bisected.Half.TOP) {
                 Block below = block.getRelative(BlockFace.DOWN);
+                Block above = block.getRelative(BlockFace.UP);
 
-                if (below.getType() != Material.AIR) {
+                // Below the stair must NOT be air
+                // Above the stair must be air
+                if (below.getType() != Material.AIR && above.getType() == Material.AIR) {
                     ChairManager.sit(player, block);
                 }
             }
